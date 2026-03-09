@@ -1,7 +1,7 @@
 param(
     [string]$FtpServer = "ftp://jimall.jpg3.kr",
     [string]$Username = "jimall",
-    [string]$Password = "asdf0531!",
+    [string]$Password = "",
     [string]$RemoteDir = "/detail/kera_manual",
     [string]$LocalDir = "C:\Users\k9k8j\Downloads\kerax_use\dist"
 )
@@ -14,7 +14,8 @@ function Create-FtpDirectory ($path) {
         $response = $request.GetResponse()
         Write-Host "Created dir $path"
         $response.Close()
-    } catch {
+    }
+    catch {
         # If it already exists, this block handles the exception silently.
     }
 }
@@ -37,7 +38,8 @@ function Upload-FtpFile ($localFilePath, $remoteFilePath) {
         $response = $request.GetResponse()
         Write-Host "Uploaded $($localFilePath | Split-Path -Leaf)"
         $response.Close()
-    } catch {
+    }
+    catch {
         Write-Host "Failed to upload $($localFilePath) to $($remoteFilePath): $_"
     }
 }
@@ -55,7 +57,8 @@ foreach ($item in $files) {
     
     if ($item.PSIsContainer) {
         Create-FtpDirectory $remotePath
-    } else {
+    }
+    else {
         Upload-FtpFile $item.FullName $remotePath
     }
 }
